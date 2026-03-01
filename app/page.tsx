@@ -1,13 +1,17 @@
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { SummarizeButton } from "@/components/summarize-button";
+import { promises as fs } from "fs";
+import path from "path";
 
 async function getTranscript(id: string) {
-  const res = await fetch(`${process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000'}/api/transcript/${id}`, {
-    cache: 'no-store'
-  });
-  if (!res.ok) return null;
-  return res.json();
+  try {
+    const filePath = path.join(process.cwd(), "transcript", `${id}.md`);
+    const content = await fs.readFile(filePath, "utf-8");
+    return { id, content, success: true };
+  } catch {
+    return null;
+  }
 }
 
 export default async function Home() {

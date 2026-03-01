@@ -5,27 +5,40 @@ import type { UIMessageChunk } from "ai";
 async function fetchTranscript(transcriptId: string) {
   "use step";
   
+  console.log("[v0] fetchTranscript step started for transcriptId:", transcriptId);
+  
   const baseUrl = process.env.VERCEL_URL 
     ? `https://${process.env.VERCEL_URL}` 
     : "http://localhost:3000";
+  
+  console.log("[v0] Fetching transcript from:", `${baseUrl}/api/transcript/${transcriptId}`);
     
   const response = await fetch(`${baseUrl}/api/transcript/${transcriptId}`);
   
+  console.log("[v0] Transcript fetch response status:", response.status);
+  
   if (!response.ok) {
+    console.log("[v0] Transcript fetch failed:", response.statusText);
     throw new Error(`Failed to fetch transcript: ${response.statusText}`);
   }
   
   const data = await response.json();
+  console.log("[v0] Transcript content length:", data.content?.length || 0);
   return data.content as string;
 }
 
 export async function summarizeTranscriptWorkflow(transcriptId: string) {
   "use workflow";
 
+  console.log("[v0] Workflow started for transcriptId:", transcriptId);
+
   // Step 1: Fetch the transcript content
+  console.log("[v0] Step 1: Fetching transcript...");
   const transcriptContent = await fetchTranscript(transcriptId);
+  console.log("[v0] Transcript fetched successfully, length:", transcriptContent?.length || 0);
 
   // Step 2: Create a durable agent to summarize the transcript
+  console.log("[v0] Step 2: Creating DurableAgent...");
   const agent = new DurableAgent({
     model: "anthropic/claude-haiku-4.5",
     system: `You are an expert at analyzing transcripts and extracting useful information.
@@ -57,7 +70,9 @@ Be concise but thorough. Focus on what's genuinely useful and memorable.`,
   });
 
   const writable = getWritable<UIMessageChunk>();
+  console.log("[v0] Got writable stream");
 
+  console.log("[v0] Starting agent.stream()...");
   const result = await agent.stream({
     messages: [
       {
@@ -68,6 +83,8 @@ Be concise but thorough. Focus on what's genuinely useful and memorable.`,
     writable,
     maxSteps: 1,
   });
+
+  console.log("[v0] Agent stream completed, messages count:", result.messages?.length || 0);
 
   return {
     transcriptId,

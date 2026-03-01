@@ -41,12 +41,14 @@ export async function GET(request: Request) {
   }
 
   console.log("[v0] Getting run status...");
-  const run = await getRun(runId);
-  console.log("[v0] Run status:", run.status, "output:", run.output ? "present" : "null");
+  const run = getRun(runId);
+  const status = await run.status;
+  const result = await run.result;
+  console.log("[v0] Run status:", status, "result:", result ? "present" : "null");
 
   return NextResponse.json({
     runId,
-    status: run.status,
-    output: run.output,
+    status,
+    output: result,
   });
 }

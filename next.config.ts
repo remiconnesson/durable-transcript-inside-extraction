@@ -1,4 +1,5 @@
 import createMDX from "@next/mdx";
+import { withWorkflow } from "workflow/next";
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
@@ -13,4 +14,4 @@ const withMDX = createMDX({
   },
 });
 
-export default withMDX(nextConfig);
+export default withWorkflow(withMDX(nextConfig));

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { SummarizeButton } from "@/components/summarize-button";
 
 async function getTranscript(id: string) {
   const res = await fetch(`${process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000'}/api/transcript/${id}`, {
@@ -32,11 +33,14 @@ export default async function Home() {
         <CardHeader>
           <CardTitle>Transcript: {transcript?.id || 'Not found'}</CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="space-y-4">
           {transcript ? (
-            <pre className="whitespace-pre-wrap text-sm bg-muted p-4 rounded-md overflow-auto max-h-96">
-              {transcript.content}
-            </pre>
+            <>
+              <pre className="whitespace-pre-wrap text-sm bg-muted p-4 rounded-md overflow-auto max-h-96">
+                {transcript.content}
+              </pre>
+              <SummarizeButton transcriptId={transcript.id} />
+            </>
           ) : (
             <p className="text-muted-foreground">Failed to load transcript</p>
           )}

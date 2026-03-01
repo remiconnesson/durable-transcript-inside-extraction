@@ -1,0 +1,24 @@
+export const metadata = {
+  title: "Hello Next.js 16 + MDX",
+  description: "Why this blog uses @next/mdx in the App Router.",
+  date: "2026-02-10",
+  tags: ["nextjs", "mdx", "app-router"],
+};
+
+# Hello Next.js 16 + MDX
+
+This is the first post in the new **MDX-powered** blog section.
+
+## Why this setup?
+
+- Content lives in-repo for a simple Git-based workflow.
+- MDX compiles with Next.js using `@next/mdx`.
+- Static routing keeps pages fast and SEO-friendly.
+
+```tsx
+export default function Example() {
+  return <p>MDX supports JSX-style snippets in code fences.</p>;
+}
+```
+
+You can now add more posts under `content/blog/*.mdx` and they will appear in `/blog`.

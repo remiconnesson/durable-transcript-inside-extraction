@@ -1,0 +1,18 @@
+export const metadata = {
+  title: "Rendering Strategies for MDX Blogs",
+  description: "How to think about SSG, ISR, and SSR with MDX content.",
+  date: "2026-02-11",
+  tags: ["ssg", "isr", "ssr"],
+};
+
+# Rendering Strategies for MDX Blogs
+
+When building a developer blog, choose a rendering strategy based on how often content changes.
+
+## Practical rule of thumb
+
+1. Use **SSG** for stable in-repo content.
+2. Add **ISR** when updates should appear without full redeploy.
+3. Use **SSR** for authenticated or personalized variants.
+
+For this template, we start with static generation and finite slugs.

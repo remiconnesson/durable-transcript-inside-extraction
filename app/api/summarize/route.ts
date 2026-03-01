@@ -43,12 +43,18 @@ export async function GET(request: Request) {
   console.log("[v0] Getting run status...");
   const run = getRun(runId);
   const status = await run.status;
-  const result = await run.result;
-  console.log("[v0] Run status:", status, "result:", result ? "present" : "null");
+  console.log("[v0] Run status:", status);
+
+  // Only fetch returnValue if completed to avoid blocking
+  let output = null;
+  if (status === "completed") {
+    output = await run.returnValue;
+    console.log("[v0] Run completed, output:", output ? "present" : "null");
+  }
 
   return NextResponse.json({
     runId,
     status,
-    output: result,
+    output,
   });
 }

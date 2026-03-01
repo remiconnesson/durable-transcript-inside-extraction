@@ -111,6 +111,13 @@ export async function summarizeTranscriptWorkflow(transcriptId: string) {
     system: STREAMED_ANALYSIS_SYSTEM_PROMPT,
     temperature: 0.3,
     maxOutputTokens: 4000,
+    tools: {
+      emit_section: {
+        description: "Emit a single analysis section for the transcript",
+        inputSchema: emitSectionSchema,
+        execute: async (args) => args,
+      },
+    },
   });
 
   const writable = getWritable<UIMessageChunk>();
@@ -122,12 +129,6 @@ export async function summarizeTranscriptWorkflow(transcriptId: string) {
         content: `Please analyze and summarize the following transcript:\n\n${transcriptContent}`,
       },
     ],
-    tools: {
-      emit_section: {
-        description: "Emit a single analysis section for the transcript",
-        parameters: emitSectionSchema,
-      },
-    },
     writable,
     maxSteps: 20,
   });

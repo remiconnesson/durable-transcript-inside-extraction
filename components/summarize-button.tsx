@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
 
 type WorkflowStatus = "idle" | "starting" | "running" | "completed" | "failed";
 
@@ -100,16 +99,17 @@ export function SummarizeButton({ transcriptId }: SummarizeButtonProps) {
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-4">
-        <Button
+        <button
           onClick={startSummarization}
           disabled={status === "starting" || status === "running"}
+          className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-50 disabled:pointer-events-none"
         >
           {status === "starting" && "Starting..."}
           {status === "running" && "Summarizing..."}
           {status === "idle" && "Summarize Transcript"}
           {status === "completed" && "Summarize Again"}
           {status === "failed" && "Retry Summarization"}
-        </Button>
+        </button>
 
         {runId && (
           <span className="text-sm text-muted-foreground">

@@ -6,7 +6,7 @@ export default function Home() {
     <div className="min-h-screen flex items-center justify-center p-4">
       <Card className="w-96 border border-black">
         <CardHeader>
-          <CardTitle>Project Title</CardTitle>
+          <CardTitle>Durable Transcript Insight Extraction</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <p className="italic">Put stuff here...</p>

@@ -1,36 +1,40 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Durable Transcript Insight Extraction
 
-## Getting Started
+This repository contains a Next.js app that loads transcripts from local Markdown files and summarizes them with a durable AI workflow.
 
-First, run the development server:
+## Quick start
+
+1. Install dependencies:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+corepack pnpm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Start the app:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+corepack pnpm dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+3. Open [http://localhost:3000](http://localhost:3000).
 
-## Learn More
+## How it works
 
-To learn more about Next.js, take a look at the following resources:
+- Transcripts live in `/transcript` (for example `transcript/transcript1.md`).
+- `GET /api/transcript/[id]` reads and returns transcript content.
+- `POST /api/summarize` starts a durable summarization workflow for a `transcriptId`.
+- `GET /api/summarize?runId=...` checks workflow status and returns output when complete.
+- The workflow implementation is in `workflows/summarize-transcript.ts`.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Common commands
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+corepack pnpm dev
+corepack pnpm lint
+corepack pnpm build
+```
 
-## Deploy on Vercel
+## Notes
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- The summarization workflow uses `@workflow/ai` with `anthropic/claude-haiku-4.5`. Ensure the required provider/runtime credentials are configured in your environment before running workflow-backed requests.
+- In restricted/offline environments, `pnpm build` can fail when Next.js attempts to fetch Google Fonts (`Geist`/`Geist Mono`).

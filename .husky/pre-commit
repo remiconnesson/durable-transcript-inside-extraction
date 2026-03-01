@@ -1,3 +1,2 @@
-pnpm verify-format
-pnpm fix
-pnpm tsc --noEmit
+corepack pnpm exec biome check --write --staged --no-errors-on-unmatched
+corepack pnpm tsc --noEmit

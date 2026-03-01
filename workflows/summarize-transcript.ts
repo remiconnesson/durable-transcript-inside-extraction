@@ -1,30 +1,21 @@
 import { DurableAgent } from "@workflow/ai/agent";
 import { getWritable } from "workflow";
 import type { UIMessageChunk } from "ai";
+import { promises as fs } from "fs";
+import path from "path";
 
 async function fetchTranscript(transcriptId: string) {
   "use step";
   
   console.log("[v0] fetchTranscript step started for transcriptId:", transcriptId);
   
-  const baseUrl = process.env.VERCEL_URL 
-    ? `https://${process.env.VERCEL_URL}` 
-    : "http://localhost:3000";
+  const filePath = path.join(process.cwd(), "transcript", `${transcriptId}.md`);
+  console.log("[v0] Reading transcript from file:", filePath);
   
-  console.log("[v0] Fetching transcript from:", `${baseUrl}/api/transcript/${transcriptId}`);
-    
-  const response = await fetch(`${baseUrl}/api/transcript/${transcriptId}`);
+  const content = await fs.readFile(filePath, "utf-8");
   
-  console.log("[v0] Transcript fetch response status:", response.status);
-  
-  if (!response.ok) {
-    console.log("[v0] Transcript fetch failed:", response.statusText);
-    throw new Error(`Failed to fetch transcript: ${response.statusText}`);
-  }
-  
-  const data = await response.json();
-  console.log("[v0] Transcript content length:", data.content?.length || 0);
-  return data.content as string;
+  console.log("[v0] Transcript content length:", content?.length || 0);
+  return content;
 }
 
 export async function summarizeTranscriptWorkflow(transcriptId: string) {
